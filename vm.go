@@ -55,7 +55,12 @@ func (v *VM) Run() {
 
 func (v *VM) Step() bool {
 	c := v.readOp()
-	f := Ops[c]
+	f, ok := Ops[c]
+	if !ok {
+		log.Printf("VM Error: Unknown OpCode %v at %v", c, v.Pc)
+		v.run = false
+		return false
+	}
 	a := v.readArgs(f)
 
 	f.Op(v, a)

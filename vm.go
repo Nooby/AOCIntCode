@@ -1,8 +1,9 @@
-package main
+package vm
 
 import (
 	"fmt"
 	"io"
+	"log"
 )
 
 type VM struct {
@@ -20,10 +21,27 @@ func (v *VM) Load(r io.Reader) error {
 		_, err := fmt.Fscanf(r, "%d,", &i)
 		if err != nil {
 			c = false
+			log.Printf("VM Error in Load at pos %v, %v", len(mem), err)
 		}
 		mem = append(mem, i)
 	}
 	v.Mem = mem
+
+	fmt.Printf("VM Load %v ints\n", len(mem))
+	return nil
+}
+
+func (v *VM) Patch(o int, r io.Reader) error {
+	var i int
+	for true {
+		_, err := fmt.Fscanf(r, "%d,", &i)
+		v.Mem[o] = i
+		if err != nil {
+			log.Printf("VM Error in Patch, %v", err)
+			break
+		}
+		o++
+	}
 	return nil
 }
 

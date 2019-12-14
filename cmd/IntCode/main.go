@@ -6,10 +6,12 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	vm "github.com/Nooby/AOCIntCode"
 )
 
 func main() {
-	p1 := VM{}
+	p1 := vm.VM{}
 
 	scanner := bufio.NewScanner(os.Stdin)
 
@@ -23,6 +25,10 @@ func main() {
 		case "read":
 			r := strings.NewReader(comm[1])
 			p1.Load(r)
+		case "patch":
+			i, _ := strconv.Atoi(comm[1])
+			r := strings.NewReader(comm[2])
+			p1.Patch(i, r)
 		case "mem":
 			if len(comm) == 1 {
 				fmt.Printf("%v\n", p1.Mem)

@@ -1,4 +1,4 @@
-package main
+package vm
 
 type Op func(v *VM, args []int)
 
